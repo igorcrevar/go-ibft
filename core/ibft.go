@@ -330,7 +330,9 @@ func (i *IBFT) RunSequence(ctx context.Context, h uint64) {
 		i.log.Info("round started", "round", view.Round)
 
 		currentRound := view.Round
+
 		ctxRound, cancelRound := context.WithCancel(ctx)
+		defer cancelRound()
 
 		i.wg.Add(4)
 
