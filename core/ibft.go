@@ -320,10 +320,7 @@ func (i *IBFT) RunSequence(ctx context.Context, h uint64) {
 	defer i.log.Info("sequence done", "height", h)
 	defer SetMeasurementTime("sequence", startTime)
 
-	for {
-		if done := i.runRound(ctx, h); done {
-			return
-		}
+	for i.runRound(ctx, h) {
 	}
 }
 
