@@ -1124,13 +1124,13 @@ func (i *IBFT) AddMessage(message *proto.IbftMessage) {
 
 // isAcceptableMessage checks if the message can even be accepted
 func (i *IBFT) isAcceptableMessage(message *proto.IbftMessage) bool {
-	//	Make sure the message sender is ok
-	if !i.backend.IsValidValidator(message) {
+	// Invalid messages are discarded
+	if message == nil || message.View == nil {
 		return false
 	}
 
-	// Invalid messages are discarded
-	if message.View == nil {
+	//	Make sure the message sender is ok
+	if !i.backend.IsValidValidator(message) {
 		return false
 	}
 
