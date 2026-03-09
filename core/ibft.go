@@ -334,7 +334,7 @@ func (i *IBFT) runRound(ctx context.Context, h uint64) bool {
 		i.log.Error("failed to handle start round callback on backend", "view", view, "err", err)
 	}
 
-	i.log.Info("round started", "round", view.Round)
+	i.log.Info("round started", "round", currentRound)
 
 	ctxRound, cancelRound := context.WithCancel(ctx)
 	defer cancelRound()
@@ -386,7 +386,7 @@ func (i *IBFT) runRound(ctx context.Context, h uint64) bool {
 		teardown()
 		i.insertBlock()
 
-		return true
+		return false
 	case <-ctxRound.Done():
 		teardown()
 
@@ -396,10 +396,10 @@ func (i *IBFT) runRound(ctx context.Context, h uint64) bool {
 
 		i.log.Debug("sequence cancelled")
 
-		return true
+		return false
 	}
 
-	return false
+	return true
 }
 
 // startRound runs the state machine loop for the current round
