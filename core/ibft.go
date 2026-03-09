@@ -331,7 +331,7 @@ func (i *IBFT) RunSequence(ctx context.Context, h uint64) {
 
 		currentRound := view.Round
 
-		ctxRound, cancelRound := context.WithCancel(ctx) //nolint:revive
+		ctxRound, cancelRound := context.WithCancel(ctx) //nolint:revive // NOSONAR
 
 		i.wg.Add(4)
 
