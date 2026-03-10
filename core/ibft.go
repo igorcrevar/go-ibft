@@ -319,13 +319,17 @@ func (i *IBFT) RunSequence(ctx context.Context, h uint64) {
 	i.log.Info("sequence started", "height", h)
 	defer i.log.Info("sequence done", "height", h)
 	defer SetMeasurementTime("sequence", startTime)
-
-	for i.runRound(ctx, h) {
+	// Run the rounds until the sequence is done (block inserted or context cancelled)
+	for {
+		if !i.runRound(ctx, h) {
+			break
+		}
 	}
 }
 
 // runRound runs a single round of the IBFT state machine and returns true
-// when the sequence is complete (block inserted or context cancelled).
+// to continue running additional rounds, and false when the sequence is
+// complete (block inserted or context cancelled).
 func (i *IBFT) runRound(ctx context.Context, h uint64) bool {
 	view := i.state.getView()
 	currentRound := view.Round
